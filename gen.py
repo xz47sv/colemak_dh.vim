@@ -1,7 +1,33 @@
+# SPDX-FileCopyrightText: 2023 reggie <contact<at>reggie<dot>re>
+# SPDX-License-Identifier: MIT
+
+# MIT License
+
+#  Copyright (c) 2023 reggie contact<at>reggie<dot>re
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice (including the next
+# paragraph) shall be included in all copies or substantial portions of the
+# Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+from collections.abc import Iterable
 from os import chdir
 from pathlib import Path
 from sys import argv
-from typing import Iterable
 
 COLEMAK = {
     "p": ";",
@@ -29,37 +55,36 @@ COLEMAK = {
 }
 
 
-def to_colemak(ch: str) -> str:
-    if ch.isupper():
-        return COLEMAK[ch.lower()].upper()
-    else:
-        return COLEMAK[ch]
+def to_colemak(char: str) -> str:
+    if char.isupper():
+        return COLEMAK[char.lower()].upper()
+    return COLEMAK[char]
 
 
 REMAPPED = {}
 
 
 def make_map(mode: str, lhs: str, rhs: str) -> str:
-    if mode not in REMAPPED.keys():
+    if mode not in REMAPPED:
         REMAPPED[mode] = []
 
-    s = "    {}noremap {} {}\n".format(mode, lhs, rhs)
+    s = f"    {mode}noremap {lhs} {rhs}\n"
     if rhs not in REMAPPED[mode]:
-        s += "    {}noremap {} <Nop>\n".format(mode, rhs)
+        s += f"    {mode}noremap {rhs} <Nop>\n"
 
     REMAPPED[mode].append(lhs)
 
     return s
 
 
-def gen_mappings(mode: str, mapping, set: Iterable[str]) -> Iterable[str]:
-    if type(mapping) == str:
-        for k in set:
+def gen_mappings(mode: str, mapping, chars: Iterable[str]) -> Iterable[str]:
+    if isinstance(mapping, str):
+        for k in chars:
             yield make_map(
                 mode, mapping.format(to_colemak(k)), mapping.format(k)
             )
     else:
-        for k in set:
+        for k in chars:
             lhs, rhs = mapping(to_colemak(k), k)
             yield make_map(mode, lhs, rhs)
 
@@ -121,17 +146,17 @@ def main():
 
     for mode in modes:
         for mapping in modes[mode]:
-            if type(mapping) == tuple:
-                set = mapping[1]
+            if isinstance(mapping, tuple):
+                chars = mapping[1]
                 mapping = mapping[0]
             else:
-                set = list(COLEMAK.keys())
-            set.sort()
-            contents += "".join(gen_mappings(mode, mapping, set))
+                chars = list(COLEMAK.keys())
+            chars.sort()
+            contents += "".join(gen_mappings(mode, mapping, chars))
 
-    for ch in ["'", '"', "(", ")", "<", ">", "[", "]", "`", "{", "}"]:
-        contents += make_map("v", "u" + ch, "i" + ch)
-        contents += make_map("v", "u" + ch, "i" + ch)
+    for char in ("'", '"', "(", ")", "<", ">", "[", "]", "`", "{", "}"):
+        contents += make_map("v", "u" + char, "i" + char)
+        contents += make_map("v", "u" + char, "i" + char)
 
     contents += """    inoremap <C-i> <C-i>
     cnoremap <C-i> <C-i>
@@ -145,7 +170,7 @@ def main():
 endfunction
 """
 
-    outfile.write_text(contents)
+    outfile.write_text(contents, encoding="utf-8")
 
 
 if __name__ == "__main__":
