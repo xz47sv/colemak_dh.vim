@@ -54,6 +54,55 @@ COLEMAK = {
     "b": "z",
 }
 
+MODES = {
+    "": [
+        lambda lhs, rhs: (lhs.upper(), rhs.upper()),
+        "{}",
+        "<C-{}>",
+        "<C-W>{}",
+        lambda lhs, rhs: ("<C-W>" + lhs.upper(), "<C-W>" + rhs.upper()),
+        "<C-W><C-{}>",
+        "[{}",
+        "]{}",
+        lambda lhs, rhs: ("g" + lhs.upper(), "g" + rhs.upper()),
+        "g{}",
+        lambda lhs, rhs: ("x" + lhs.upper(), "z" + rhs.upper()),
+        lambda lhs, rhs: ("x" + lhs, "z" + rhs),
+        ("<C-W>g{}", ["f", "F", "t", "T"]),
+        ("<C-\\><C-{}>", ["n"]),
+        ("[<C-{}>", ["D", "I"]),
+        ("]<C-{}>", ["D", "I"]),
+        ("[{}", ["D", "I", "P"]),
+        ("]{}", ["D", "I", "P"]),
+        ("g<C-{}>", ["h"]),
+        # TODO: zuw, zug, zuW, zuG not tested
+    ],
+    "i": [
+        ("<C-G>{}", ["j", "k", "u"]),
+        ("<C-G><C-{}>", ["j", "k", "u"]),
+        lambda lhs, rhs: (
+            "<C-C><C-" + lhs + ">",
+            "<C-X><C-" + rhs + ">",
+        ),
+        lambda lhs, rhs: (
+            "<C-P><C-" + lhs + ">",
+            "<C-R><C-" + rhs + ">",
+        ),
+        "<C-{}>",
+        ("<C-\\><C-{}>", ["n"]),
+    ],
+    "c": ["<C-{}>", ("<C-\\><C-{}>", ["n"])],
+    "v": [
+        ("a{}", ["B", "b", "p", "s", "t"]),
+        lambda lhs, rhs: ("u" + lhs, "i" + rhs),
+    ],
+    "o": [
+        ("a{}", ["B", "b", "p", "s", "t"]),
+        lambda lhs, rhs: ("u" + lhs, "i" + rhs),
+    ],
+    "t": [("<C-\\><C-{}>", ["n", "o"])],
+}
+
 
 def to_colemak(char: str) -> str:
     if char.isupper():
@@ -61,7 +110,7 @@ def to_colemak(char: str) -> str:
     return COLEMAK[char]
 
 
-REMAPPED = {}
+REMAPPED: dict[str, list[str]] = {}
 
 
 def make_map(mode: str, lhs: str, rhs: str) -> str:
@@ -90,62 +139,13 @@ def gen_mappings(mode: str, mapping, chars: Iterable[str]) -> Iterable[str]:
 
 
 def main():
-    modes = {
-        "": [
-            lambda lhs, rhs: (lhs.upper(), rhs.upper()),
-            "{}",
-            "<C-{}>",
-            "<C-W>{}",
-            lambda lhs, rhs: ("<C-W>" + lhs.upper(), "<C-W>" + rhs.upper()),
-            "<C-W><C-{}>",
-            "[{}",
-            "]{}",
-            lambda lhs, rhs: ("g" + lhs.upper(), "g" + rhs.upper()),
-            "g{}",
-            lambda lhs, rhs: ("x" + lhs.upper(), "z" + rhs.upper()),
-            lambda lhs, rhs: ("x" + lhs, "z" + rhs),
-            ("<C-W>g{}", ["f", "F", "t", "T"]),
-            ("<C-\\><C-{}>", ["n"]),
-            ("[<C-{}>", ["D", "I"]),
-            ("]<C-{}>", ["D", "I"]),
-            ("[{}", ["D", "I", "P"]),
-            ("]{}", ["D", "I", "P"]),
-            ("g<C-{}>", ["h"]),
-            # TODO: zuw, zug, zuW, zuG not tested
-        ],
-        "i": [
-            ("<C-G>{}", ["j", "k", "u"]),
-            ("<C-G><C-{}>", ["j", "k", "u"]),
-            lambda lhs, rhs: (
-                "<C-C><C-" + lhs + ">",
-                "<C-X><C-" + rhs + ">",
-            ),
-            lambda lhs, rhs: (
-                "<C-P><C-" + lhs + ">",
-                "<C-R><C-" + rhs + ">",
-            ),
-            "<C-{}>",
-            ("<C-\\><C-{}>", ["n"]),
-        ],
-        "c": ["<C-{}>", ("<C-\\><C-{}>", ["n"])],
-        "v": [
-            ("a{}", ["B", "b", "p", "s", "t"]),
-            lambda lhs, rhs: ("u" + lhs, "i" + rhs),
-        ],
-        "o": [
-            ("a{}", ["B", "b", "p", "s", "t"]),
-            lambda lhs, rhs: ("u" + lhs, "i" + rhs),
-        ],
-        "t": [("<C-\\><C-{}>", ["n", "o"])],
-    }
-
     outfile = Path("./autoload/colemak_dh.vim")
     outfile.parent.mkdir(exist_ok=True)
 
     contents = "function colemak_dh#setup()\n"
 
-    for mode in modes:
-        for mapping in modes[mode]:
+    for mode in MODES:
+        for mapping in MODES[mode]:
             if isinstance(mapping, tuple):
                 chars = mapping[1]
                 mapping = mapping[0]
