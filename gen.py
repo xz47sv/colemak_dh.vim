@@ -91,7 +91,13 @@ MODES = {
         "<C-{}>",
         ("<C-\\><C-{}>", ["n"]),
     ],
-    "c": ["<C-{}>", ("<C-\\><C-{}>", ["n"])],
+    "c": [
+        (
+            "<C-{}>",
+            [v for v in COLEMAK if v not in ("l", "i")],
+        ),
+        ("<C-\\><C-{}>", ["n"]),
+    ],
     "v": [
         ("a{}", ["B", "b", "p", "s", "t"]),
         lambda lhs, rhs: ("u" + lhs, "i" + rhs),
@@ -159,7 +165,6 @@ def main():
         contents += make_map("v", "u" + char, "i" + char)
 
     contents += """    inoremap <C-i> <C-i>
-    cnoremap <C-i> <C-i>
     inoremap <C-m> <C-m>
     cnoremap <C-m> <C-m>
     nnoremap XX ZZ

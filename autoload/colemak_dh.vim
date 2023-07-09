@@ -602,14 +602,10 @@ function colemak_dh#setup()
     cnoremap <C-t> <C-f>
     cnoremap <C-m> <C-h>
     cnoremap <C-h> <Nop>
-    cnoremap <C-u> <C-i>
-    cnoremap <C-i> <Nop>
     cnoremap <C-n> <C-j>
     cnoremap <C-j> <Nop>
     cnoremap <C-e> <C-k>
     cnoremap <C-k> <Nop>
-    cnoremap <C-i> <C-l>
-    cnoremap <C-l> <Nop>
     cnoremap <C-h> <C-m>
     cnoremap <C-k> <C-n>
     cnoremap <C-y> <C-o>
@@ -620,6 +616,7 @@ function colemak_dh#setup()
     cnoremap <C-r> <C-s>
     cnoremap <C-b> <C-t>
     cnoremap <C-l> <C-u>
+    cnoremap <C-u> <Nop>
     cnoremap <C-c> <C-x>
     cnoremap <C-x> <Nop>
     cnoremap <C-j> <C-y>
@@ -783,7 +780,6 @@ function colemak_dh#setup()
     vnoremap u} i}
     vnoremap i} <Nop>
     inoremap <C-i> <C-i>
-    cnoremap <C-i> <C-i>
     inoremap <C-m> <C-m>
     cnoremap <C-m> <C-m>
     nnoremap XX ZZ
