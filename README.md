@@ -6,7 +6,12 @@ To use this, download it with your plugin manager of choice or just download the
 You should run the setup function before setting up any of your personal
 mappings, because they will be overwritten.
 
-If you use Vim you can run it with:
+If you use Vim you can enable it by setting a variable:
+```vim
+let g:colemak_dh_autoload=1
+```
+
+or running the setup function:
 
 ```vim
 call colemak_dh#setup()
