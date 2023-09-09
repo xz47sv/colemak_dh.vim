@@ -31,5 +31,5 @@ require('colemak_dh').setup()
 
 There are no customization options, so if you wish to change something feel
 free to look at the code (it is very simple) or read
-[this](https://reggie.re/20230415-using-vim-with-the-colemak-dh-layout.html)
+[this](https://ash.fail/20230415-using-vim-with-the-colemak-dh-layout.html)
 post.
