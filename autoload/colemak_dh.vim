@@ -787,4 +787,6 @@ function colemak_dh#setup()
     nnoremap <nowait> z b
     vnoremap <nowait> z b
     noremap <nowait> z b
+    noremap O :
+    noremap : P
 endfunction

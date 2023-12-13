@@ -172,6 +172,8 @@ def main():
     nnoremap <nowait> z b
     vnoremap <nowait> z b
     noremap <nowait> z b
+    noremap O :
+    noremap : P
 endfunction
 """
 
