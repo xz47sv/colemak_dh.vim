@@ -1,5 +1,3 @@
-if !get(g:, 'colemak_dh_autoload')
-    finish
+if get(g:, 'colemak_dh_autoload')
+    call colemak_dh#setup()
 endif
-
-call colemak_dh#setup()
