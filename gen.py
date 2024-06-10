@@ -164,18 +164,15 @@ def main():
         contents += make_map("v", "u" + char, "i" + char)
         contents += make_map("v", "u" + char, "i" + char)
 
-    contents += """    inoremap <C-i> <C-i>
-    inoremap <C-m> <C-m>
-    cnoremap <C-m> <C-m>
-    nnoremap XX ZZ
-    vnoremap <nowait> i l
-    nnoremap <nowait> z b
-    vnoremap <nowait> z b
-    noremap <nowait> z b
-    noremap O :
-    noremap : P
-endfunction
-"""
+    extra = "\n".join(
+        map(
+            lambda s: (4 * " " + s).rstrip(),
+            Path("./extra.vim").read_text(encoding="utf-8").splitlines(),
+        )
+    )
+
+    contents += extra
+    contents += "\nendfunction\n"
 
     outfile.write_text(contents, encoding="utf-8")
 

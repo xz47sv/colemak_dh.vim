@@ -789,4 +789,10 @@ function colemak_dh#setup()
     noremap <nowait> z b
     noremap O :
     noremap : P
+
+    augroup colemak_dh
+        au!
+        au FileType qf nnoremap <buffer> <CR> <CR>
+        au FileType help nmap <buffer> gY gO
+    augroup END
 endfunction
