@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # SPDX-FileCopyrightText: 2023-2024 Ash <contact@ash.fail>
 # SPDX-License-Identifier: MIT
 
@@ -97,6 +99,13 @@ MODES = {
             [v for v in COLEMAK if v not in ("l", "i")],
         ),
         ("<C-\\><C-{}>", ["n"]),
+        (
+            lambda lhs, rhs: (
+                f"<C-T><C-{lhs.upper()}>",
+                f"<C-R><C-{rhs.upper()}>",
+            ),
+            ["f", "l", "p"],
+        ),
     ],
     "v": [
         ("a{}", ["B", "b", "p", "s", "t"]),

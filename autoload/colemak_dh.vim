@@ -623,6 +623,12 @@ function colemak_dh#setup()
     cnoremap <C-x> <C-z>
     cnoremap <C-\><C-k> <C-\><C-n>
     cnoremap <C-\><C-n> <Nop>
+    cnoremap <C-T><C-T> <C-R><C-F>
+    cnoremap <C-R><C-F> <Nop>
+    cnoremap <C-T><C-I> <C-R><C-L>
+    cnoremap <C-R><C-L> <Nop>
+    cnoremap <C-T><C-;> <C-R><C-P>
+    cnoremap <C-R><C-P> <Nop>
     vnoremap aZ aB
     vnoremap aB <Nop>
     vnoremap az ab
